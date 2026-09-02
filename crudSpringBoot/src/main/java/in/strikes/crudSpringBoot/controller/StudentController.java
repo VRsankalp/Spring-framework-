@@ -21,6 +21,7 @@ public class StudentController {
     // CREATE Student
     @PostMapping("/create")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        student.setDeleted(false);
         Student createdStudent = studentService.createStudent(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
     }
@@ -75,5 +76,14 @@ public class StudentController {
         }
 
         return ResponseEntity.ok("Student deleted successfully");
+    }
+    @PatchMapping("/delete-soft/{id}")
+    public ResponseEntity<String> deleteStudentSoft( @PathVariable Long id ){
+        Boolean isDeleted = studentService.deleteStudentSoft(id);
+        if (!isDeleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok("Record Deleted ");
+
     }
 }
